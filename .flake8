@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 110
+exclude = venv, data
+
+# Specify a different max-line-length for config.py using per-file-ignores
+per-file-ignores =
+    config.py: E501
