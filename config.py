@@ -8,19 +8,19 @@ load_dotenv(dotenv_path, override=True)
 
 class ConfigEnv:
 
-    # nombre del archivo
+    # Nombre del archivo
     FILE_NAME = os.getenv("FILE_NAME")
 
-    # idioma
+    # Idioma
     LENGUAGE = os.getenv("LENGUAGE")
 
-    # determina el entorno: (PROD - DEV - SCRIPT)
-    ENVIRONMENT = os.getenv('ENVIRONMENT')
+    # Determina el entorno: (PROD - DEV - SCRIPT)
+    ENVIRONMENT = os.getenv("ENVIRONMENT")
 
     # ----------------------------- ENVIRONMENT ------------------------------------
-    if (ENVIRONMENT == 'SCRIPT'):
+    if ENVIRONMENT == "SCRIPT":
         pass
-    elif (ENVIRONMENT == 'DEV'):
+    elif ENVIRONMENT == "DEV":
         pass
-    elif (ENVIRONMENT == 'PROD'):
-       pass
+    elif ENVIRONMENT == "PROD":
+        pass

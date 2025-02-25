@@ -16,7 +16,7 @@ class EmbeddingCategorizer:
         producto en el DataFrame basado en similitud.
     """
     def __init__(self, model_name="paraphrase-multilingual-MiniLM-L12-v2"):
-        """Inicializa el modelo de embeddings optimizado para español."""
+        """Inicializa el EmbeddingCategorizer optimizado para español."""
         print(f"Cargando el modelo {model_name}...")
         self.model = SentenceTransformer(model_name)
 

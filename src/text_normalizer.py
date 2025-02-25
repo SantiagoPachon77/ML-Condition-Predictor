@@ -14,6 +14,7 @@ class TextNormalizer:
     Incluye eliminación de stopwords, lematización, stemming y limpieza de caracteres especiales.
 
     Métodos:
+        normalize_text(text): Normaliza el texto eliminando tildes y convirtiendo letras a minúsculas
         remove_stopwords(text, keep_words=[]): Elimina stopwords del texto en español o inglés,
         excepto términos clave.
         lemmatize_text(text): Aplica lematización al texto en español o inglés.
@@ -24,10 +25,10 @@ class TextNormalizer:
     """
     def __init__(self):
         """
-        Inicializa el normalizador de texto cargando el modelo de lenguaje adecuado según la configuración.
+        Inicializa TextNormalizer cargando el modelo de lenguaje adecuado según la configuración.
         Descarga las stopwords necesarias para la limpieza del texto.
         """
-        self.lenguage_env = LANGUAGE_MAPPING[ConfigEnv.LANGUAGE]
+        self.lenguage_env = LANGUAGE_MAPPING[ConfigEnv.LENGUAGE]
         if self.lenguage_env == 'spanish':
             self.nlp_es = spacy.load("es_core_news_sm")
         else:
@@ -35,6 +36,10 @@ class TextNormalizer:
 
         nltk.download('stopwords')
         nltk.download('punkt')
+
+    def normalize_text(self, text):
+        text = unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore').decode('utf-8')  # Quita tildes
+        return text.lower().strip()
 
     def remove_stopwords(self, text, keep_words=[]):
         """Elimina stopwords del texto en español o inglés, excepto términos clave."""
@@ -86,11 +91,11 @@ class TextNormalizer:
         if use_regex:
             text = self.clean_text_regex(text)
         if remove_sw:
-            text = self.remove_stopwords(text, self.lenguage_env, keep_words)
+            text = self.remove_stopwords(text, keep_words)
         if lemmatize:
-            text = self.lemmatize_text(text, self.lenguage_env)
+            text = self.lemmatize_text(text)
             text = self.clean_text_regex(text)
-            text = self.remove_stopwords(text, self.lenguage_env, keep_words)
+            text = self.remove_stopwords(text, keep_words)
         if stem:
-            text = self.stem_text(text, self.lenguage_env)
+            text = self.stem_text(text)
         return text
