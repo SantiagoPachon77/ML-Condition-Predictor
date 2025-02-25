@@ -28,3 +28,6 @@ clean_venv: venv
 # -----------------------------------------
 processed_data_products:
 	@$(PYTHON_INTERPRETER) $(APP) processed-data-products
+
+feaure_engineering_products:
+	@$(PYTHON_INTERPRETER) $(APP) feaure-engineering-products

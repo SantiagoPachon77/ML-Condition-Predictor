@@ -30,10 +30,10 @@ class DataPreprocessing:
     def build_dataset(self, path_raw):
         """
         Carga los datos desde un archivo JSON y los divide en conjuntos de entrenamiento y prueba.
-        
+
         Parámetros:
             path_raw (str): Ruta del archivo JSON con los datos.
-        
+
         Retorna:
             tuple: X_train, y_train, X_test, y_test
         """
@@ -50,16 +50,17 @@ class DataPreprocessing:
 
     def clean_data_init(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Realiza la limpieza inicial del DataFrame eliminando estructuras anidadas, 
+        Realiza la limpieza inicial del DataFrame eliminando estructuras anidadas,
         columnas irrelevantes y optimizando tipos de datos.
 
         Parámetros:
             df (pd.DataFrame): DataFrame original a limpiar.
-        
+
         Retorna:
             pd.DataFrame: DataFrame limpio.
         """
         print("Aplicando transformación de estructuras anidadas...")
+
         def flatten_json(value, prefix=''):
             # Convierte estructuras anidadas ej. 'JSON, listas' en columnas planas
             if isinstance(value, str):
@@ -89,13 +90,17 @@ class DataPreprocessing:
 
         # Elimina columnas con 'id', 'url' o 'permalink'
         df_expanded.columns = df_expanded.columns.astype(str)
-        df_clean = df_expanded.loc[:, ~df_expanded.columns.str.contains(r'\b(url|permalink)\b', case=False, regex=True)]
+        df_clean = df_expanded.loc[:, ~df_expanded.columns.str
+                                   .contains(r'\b(url|permalink)\b', case=False, regex=True)]
 
         # Convierte tipos de datos validando fechas
         print("Validando columnas de fecha...")
         for col in df_clean.select_dtypes(include=['object']):
             try:
-                sample_values = df_clean[col].dropna().sample(n=min(10, len(df_clean[col].dropna())), random_state=42).tolist()
+                sample_values = df_clean[col].dropna() \
+                                             .sample(n=min(10, len(df_clean[col].dropna())),
+                                                     random_state=42).tolist()
+
                 if all(isinstance(parse(val, fuzzy=True), pd.Timestamp) for val in sample_values):
                     df_clean[col] = pd.to_datetime(df_clean[col], errors='coerce', infer_datetime_format=True)
             except Exception:
@@ -108,6 +113,7 @@ class DataPreprocessing:
         df_clean.reset_index(inplace=True)
 
         print("Extrayendo dimensiones de imágenes...")
+
         def extract_dimensions(size):
             """Extrae el ancho y alto de una cadena con formato 'AnchoxAlto'."""
             if isinstance(size, str) and 'x' in size:
@@ -116,30 +122,38 @@ class DataPreprocessing:
             return None, None
 
         # alto y ancho de cada imagen
-        df_clean[['pictures_width', 'pictures_height']] = (df_clean['pictures_size']
-                                                          .apply(lambda x: pd.Series(extract_dimensions(x))))
-        df_clean[['pictures_max_width', 'pictures_max_height']] = (df_clean['pictures_max_size']
-                                                                   .apply(lambda x: pd.Series(extract_dimensions(x))))
+        # Corrección de E501: Líneas largas divididas en varias líneas para mejorar legibilidad
+        df_clean[['pictures_width', 'pictures_height']] = (
+            df_clean['pictures_size'].apply(lambda x: pd.Series(extract_dimensions(x)))
+        )
 
+        df_clean[['pictures_max_width', 'pictures_max_height']] = (
+            df_clean['pictures_max_size'].apply(lambda x: pd.Series(extract_dimensions(x)))
+        )
+
+        # --
         df_clean['date_created'] = pd.to_datetime(df_clean['date_created'], utc=True)
         df_clean['last_updated'] = pd.to_datetime(df_clean['last_updated'], utc=True)
 
         df_clean['start_time'] = pd.to_datetime(df_clean['start_time'], unit='ms', utc=True)
         df_clean['stop_time'] = pd.to_datetime(df_clean['stop_time'], unit='ms', utc=True)
 
-        df_clean = df_clean[['seller_address_state.name', 'seller_address_city.name', 'condition',
-        'base_price', 'shipping_local_pick_up', 'shipping_free_shipping',
-        'shipping_mode', 'non_mercado_pago_payment_methods_description',
-        'non_mercado_pago_payment_methods_type', 'listing_type_id', 'price',
-        'buying_mode', 'tags_0', 'accepts_mercadopago', 'automatic_relist',
-        'status', 'initial_quantity', 'sold_quantity', 'available_quantity',
-        'warranty', 'pictures_width', 'pictures_height', 'pictures_max_width',
-        'pictures_max_height', 'start_time', 'stop_time',
-        'date_created', 'last_updated', 'title', 'seller_id', 'category_id']]
+        # Corrección de E128: Indentación corregida en listas de selección de columnas
+        df_clean = df_clean[[
+                'seller_address_state.name', 'seller_address_city.name', 'condition',
+                'base_price', 'shipping_local_pick_up', 'shipping_free_shipping',
+                'shipping_mode', 'non_mercado_pago_payment_methods_description',
+                'non_mercado_pago_payment_methods_type', 'listing_type_id', 'price',
+                'buying_mode', 'tags_0', 'accepts_mercadopago', 'automatic_relist',
+                'status', 'initial_quantity', 'sold_quantity', 'available_quantity',
+                'warranty', 'pictures_width', 'pictures_height', 'pictures_max_width',
+                'pictures_max_height', 'start_time', 'stop_time',
+                'date_created', 'last_updated', 'title', 'seller_id', 'category_id'
+            ]]
 
         return df_clean.reset_index(drop=True)
-    
-    def impute_missing_values(self, df, categorical_strategy='mode', 
+
+    def impute_missing_values(self, df, categorical_strategy='mode',
                               numerical_strategy='median', use_knn=False, n_neighbors=5):
         """
         Imputa valores faltantes en el DataFrame según el tipo de variable.
