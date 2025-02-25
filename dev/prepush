@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Ejecutar el script de linters ubicado en dev/tools.sh
+./dev/tools.sh l
+
+if [ $? -ne 0 ]; then
+  echo "Linters checks failed. Please fix the issues before pushing."
+  exit 1
+fi
+
+echo "All linters passed. Proceeding with push."
