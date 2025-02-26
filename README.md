@@ -1,6 +1,5 @@
 # ML-Condition-Predictor
 Este repositorio contiene un clasificador de productos en un marketplace, diseñado para predecir si un artículo es nuevo o usado.
-Este repositorio contiene un clasificador de productos en un marketplace, diseñado para predecir si un artículo es nuevo o usado.
 
 El flujo de trabajo está diseñado para ser modular y reproducible, permitiendo ejecutar cada etapa del proceso de manera independiente. Se utilizan técnicas de transformación y limpieza de datos, selección de variables, integración con APIs externas, optimización de hiperparámetros y validación de modelos para garantizar un alto desempeño en la clasificación.
 
