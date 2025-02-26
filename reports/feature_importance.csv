@@ -1,0 +1,26 @@
+Feature,Importance
+num__available_quantity,0.12338730162167413
+num__initial_quantity,0.12173820476070084
+cat__listing_type_id_free,0.11185355924754971
+num__sold_quantity,0.05025340602983136
+num__base_price,0.04934437968098714
+num__diff_price,0.04750872134446563
+num__price,0.04331254363838507
+num__pictures_max_area,0.04177843242283679
+num__pictures_area,0.04121353723864152
+num__pictures_max_height,0.035919590481783094
+cat__listing_type_id_bronze,0.035689805798621986
+num__pictures_max_ratio_relation,0.026213795149662527
+num__pictures_max_width,0.02542936198346002
+num__len_title,0.02483103029179608
+num__pictures_ratio_relation,0.023666259220969897
+num__pictures_height,0.02197777395901272
+num__time_since_last_update,0.01806786246846083
+num__listing_duration,0.016373606925975125
+num__pictures_width,0.016036821117020976
+cat__title_class_nuevo,0.013646538844721967
+cat__listing_type_id_silver,0.01318316640547698
+cat__title_class_usado,0.011952340990665269
+num__automatic_relist,0.008607931419375926
+cat__warranty_class_garantia media,0.007936870597877965
+cat__shipping_mode_not_specified,0.006738211519273966
