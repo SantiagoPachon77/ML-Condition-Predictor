@@ -2,10 +2,11 @@ import ast
 import json
 import numpy as np
 import pandas as pd
-
 import scipy.stats as stats
 from dateutil.parser import parse
 from sklearn.impute import KNNImputer
+import warnings
+warnings.filterwarnings("ignore")
 
 
 class DataPreprocessing:
@@ -138,7 +139,6 @@ class DataPreprocessing:
         df_clean['start_time'] = pd.to_datetime(df_clean['start_time'], unit='ms', utc=True)
         df_clean['stop_time'] = pd.to_datetime(df_clean['stop_time'], unit='ms', utc=True)
 
-        # Corrección de E128: Indentación corregida en listas de selección de columnas
         df_clean = df_clean[[
                 'seller_address_state.name', 'seller_address_city.name', 'condition',
                 'base_price', 'shipping_local_pick_up', 'shipping_free_shipping',
@@ -214,7 +214,7 @@ class DataPreprocessing:
 
         return df_transformed
 
-    def preprocessing(self, file_path: str) -> pd.DataFrame:
+    def preprocessing(self, file_path: str, df_name='train') -> pd.DataFrame:
         """
         Ejecuta el preprocesamiento completo de los datos.
 
@@ -225,11 +225,14 @@ class DataPreprocessing:
             pd.DataFrame: DataFrame preprocesado.
         """
         X_train, y_train, _, _ = self.build_dataset(file_path)
+        if df_name == 'test':
+            _, _, X_train, y_train = self.build_dataset(file_path)
 
         print("conformando data set inicial ..")
         y_train = pd.DataFrame(y_train)
         X_train = pd.DataFrame(X_train)
         df_products = pd.concat([X_train, y_train], axis=1)
+        df_products['condition'] = y_train
 
         print("limpieza inicial ..")
         df_products_clean = self.clean_data_init(df_products)

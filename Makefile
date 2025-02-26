@@ -31,3 +31,9 @@ processed_data_products:
 
 feaure_engineering_products:
 	@$(PYTHON_INTERPRETER) $(APP) feaure-engineering-products
+
+model_training:
+	@$(PYTHON_INTERPRETER) $(APP) model-training
+
+predict:
+	@$(PYTHON_INTERPRETER) $(APP) predict

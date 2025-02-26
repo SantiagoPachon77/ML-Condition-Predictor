@@ -48,3 +48,34 @@ selected_features = [
     'time_since_last_update', 'categoria_predicha', 'warranty_class', 'pictures_max_ratio_relation',
     'base_price', 'available_quantity'
 ]
+
+# Conversión de tipos
+conversion_dict = {
+    # Convertir booleanos representados como enteros a int
+    **{col: "int" for col in [
+        "shipping_local_pick_up", "shipping_free_shipping", "accepts_mercadopago",
+        "automatic_relist", "initial_quantity", "sold_quantity", "available_quantity",
+        "have_warranty", "len_title"
+    ]},
+
+    # Convertir variables numéricas continuas a float
+    **{col: "float" for col in [
+        "base_price", "price", "pictures_width", "pictures_height", "pictures_max_width",
+        "pictures_max_height", "time_to_start", "listing_duration", "pictures_area",
+        "pictures_max_area", "pictures_ratio_relation", "pictures_max_ratio_relation",
+        "diff_price", "time_since_last_update"
+    ]},
+
+    # Convertir variables categóricas a category
+    **{col: "category" for col in [
+        "shipping_mode", "non_mercado_pago_payment_methods_type", "listing_type_id",
+        "buying_mode", "tags_0", "status", "warranty_class", "title_class"
+    ]},
+
+    # Convertir variables de texto explícito a string
+    **{col: "str" for col in [
+        "non_mercado_pago_payment_methods_description", "categoria_predicha",
+        "seller_address_state.name_clean_match", "seller_address_city.name_clean_match",
+        'category_id', 'seller_id'
+    ]}
+}

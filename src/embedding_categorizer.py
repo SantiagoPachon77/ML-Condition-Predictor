@@ -1,5 +1,7 @@
 from sentence_transformers import SentenceTransformer
 import faiss
+import warnings
+warnings.filterwarnings("ignore")
 
 
 class EmbeddingCategorizer:

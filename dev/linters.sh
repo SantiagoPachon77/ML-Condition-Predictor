@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuración de variables
-IMAGE_NAME=${IMAGE_NAME:-"condition-predictor"}
+IMAGE_NAME=${IMAGE_NAME:-"ML-Condition-Predictor"}
 IMAGE_TAG=${DOCKER_IMAGE_TAG:-'dev'}
 VOLUME=$(pwd):/code  # Mapea el directorio actual al contenedor
 

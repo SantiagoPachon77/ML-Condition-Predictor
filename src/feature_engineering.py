@@ -6,6 +6,8 @@ from src.data_preprocessing import DataPreprocessing
 from src.text_normalizer import TextNormalizer
 from src.embedding_categorizer import EmbeddingCategorizer
 from src.api_argentina_connector import APIArgentinaConnector
+import warnings
+warnings.filterwarnings("ignore")
 
 
 class FeatureEngineering:
@@ -111,6 +113,7 @@ class FeatureEngineering:
         return df
 
     def feature_engineering_vars(self, df_clean: pd.DataFrame,  categorias):
+
         print("Clasificando garantía...")
         df_clean = df_clean.reset_index()
         keep_words = ['sin', 'con']
@@ -189,7 +192,7 @@ class FeatureEngineering:
 
         # match provincias ar -----
         df_categorizado['seller_address_state.name_clean'] = df_categorizado[
-            'seller_address_state.name'].apply(lambda text: self.tn.clean_text(
+            'seller_address_state.name'].fillna('').apply(lambda text: self.tn.clean_text(
                 text, remove_sw=False, lemmatize=False, stem=False, use_regex=True))
 
         # Guarda el original con tildes
@@ -197,12 +200,17 @@ class FeatureEngineering:
         df_categorizado = self.match_cities(df_categorizado, "seller_address_state.name_clean", state_dict)
 
         # match ciudades ar -----
-        df_categorizado['seller_address_city.name_clean'] = df_categorizado['seller_address_city.name'].apply(
-                lambda text: self.tn.clean_text(text, remove_sw=False, lemmatize=False,
-                                                stem=False, use_regex=True, language='spanish'))
+        df_categorizado['seller_address_city.name_clean'] = df_categorizado[
+            'seller_address_city.name'].fillna('').apply(lambda text: self.tn.clean_text(
+                text, remove_sw=False, lemmatize=False, stem=False, use_regex=True))
 
         # Guarda el original con tildes
         ciudad_dict = {self.tn.normalize_text(c): c for c in ciudades_ar["nombre"]}
         df_categorizado = self.match_cities(df_categorizado, "seller_address_city.name_clean", ciudad_dict)
+
+        print("imputar datos faltantes ..")
+        df_categorizado = self.dp.impute_missing_values(df_categorizado,
+                                                        categorical_strategy='mode',
+                                                        numerical_strategy='median')
 
         return df_categorizado.reset_index()
